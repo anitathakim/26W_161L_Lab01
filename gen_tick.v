@@ -27,14 +27,15 @@ reg switch = 0;
 always @(posedge src_clk) begin
     // put your code for the multiplier here
     if (enable) begin
-        cnt <= cnt + 1;
-
-        if (cnt >= limit) begin
+        if (cnt + 1 != limit) begin
+            cnt <= cnt + 1;
+        end else begin
             cnt <= 0;
             switch <= ~switch;
         end
     end else begin
         switch <= 0;
+        cnt <= 0;
     end
 
 end

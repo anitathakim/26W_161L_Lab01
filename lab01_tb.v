@@ -116,7 +116,12 @@ module lab01_tb;
         
 		// Add more tests here
 
-         // ---------------------------------------------
+        last_tick = 0;
+        transition_count = 0;
+        count = 0;
+        high_count = 0;
+        
+        // ---------------------------------------------
         // Testing Source clock 100Hz, Tick 5Hz 
         // --------------------------------------------- 
         $write("Test Source clock 100Hz, Tick 5Hz ... ");
@@ -133,7 +138,7 @@ module lab01_tb;
             last_tick <= tick_100_5;
         end
 
-        if (high_count == 500 & transition_count == 20) begin
+        if (high_count == 2500 & transition_count == 250) begin
             $display("PASSED");
         end else begin
             $display("FAILED");
@@ -142,8 +147,13 @@ module lab01_tb;
         $display("Load (%d/%d): %0.2f", high_count, count, 1.0 * high_count / count);
         $display("Transition count: %d", transition_count);
 
+        last_tick = 0;
+        transition_count = 0;
+        count = 0;
+        high_count = 0;
+
         // ---------------------------------------------
-        // Testing Source clock 100Hz, Tick 2Hz 
+        // Testing Source clock 100Hz, Tick 50Hz 
         // --------------------------------------------- 
         $write("Test Source clock 100Hz, Tick 50Hz ... ");
         totalTests <= 1;
@@ -159,7 +169,7 @@ module lab01_tb;
             last_tick <= tick_100_50;
         end
 
-        if (high_count == 500 & transition_count == 20) begin
+        if (high_count == 500 & transition_count == 500) begin
             $display("PASSED");
         end else begin
             $display("FAILED");
