@@ -1,11 +1,11 @@
 //=========================================================================
 // Name & Email must be EXACTLY as in Gradescope roster!
-// Name: 
-// Email: 
+// Name: Anita Hakim
+// Email: ahaki018@ucr.edu
 // 
-// Assignment name: 
+// Assignment name: 1
 // Lab section: 
-// TA: 
+// TA: Allan Knight
 // 
 // I hereby certify that I have not received assistance on this assignment,
 // or used code, from ANY outside source other than the instruction team
@@ -49,6 +49,17 @@ module lab01_tb;
     // -------------------------------------------------------
     // Instantiate at least 2 more units here 
     // -------------------------------------------------------
+    gen_tick #(.SRC_FREQ(100), .TICK_FREQ(5)) uut_100_5 (
+        .src_clk(clk),
+        .enable(1'b1) ,  
+        .tick(tick_100_5)
+    );
+
+    gen_tick #(.SRC_FREQ(100), .TICK_FREQ(50)) uut_100_50 (
+        .src_clk(clk),
+        .enable(1'b1) ,  
+        .tick(tick_100_50)
+    );
 
     initial begin 
     
@@ -104,6 +115,58 @@ module lab01_tb;
         $display("Transition count: %d", transition_count);
         
 		// Add more tests here
+
+         // ---------------------------------------------
+        // Testing Source clock 100Hz, Tick 5Hz 
+        // --------------------------------------------- 
+        $write("Test Source clock 100Hz, Tick 5Hz ... ");
+        totalTests <= 1;
+        while(count < 5000) begin
+            @(posedge clk);
+            if (last_tick == 0 & tick_100_5 != last_tick) begin
+                transition_count <= transition_count + 1;
+            end
+            count = count + 1;
+            if (tick_100_5 == 1) begin
+                high_count <= high_count + 1;
+            end
+            last_tick <= tick_100_5;
+        end
+
+        if (high_count == 500 & transition_count == 20) begin
+            $display("PASSED");
+        end else begin
+            $display("FAILED");
+            failedTests = failedTests + 1;
+        end
+        $display("Load (%d/%d): %0.2f", high_count, count, 1.0 * high_count / count);
+        $display("Transition count: %d", transition_count);
+
+        // ---------------------------------------------
+        // Testing Source clock 100Hz, Tick 2Hz 
+        // --------------------------------------------- 
+        $write("Test Source clock 100Hz, Tick 50Hz ... ");
+        totalTests <= 1;
+        while(count < 1000) begin
+            @(posedge clk);
+            if (last_tick == 0 & tick_100_50 != last_tick) begin
+                transition_count <= transition_count + 1;
+            end
+            count = count + 1;
+            if (tick_100_50 == 1) begin
+                high_count <= high_count + 1;
+            end
+            last_tick <= tick_100_50;
+        end
+
+        if (high_count == 500 & transition_count == 20) begin
+            $display("PASSED");
+        end else begin
+            $display("FAILED");
+            failedTests = failedTests + 1;
+        end
+        $display("Load (%d/%d): %0.2f", high_count, count, 1.0 * high_count / count);
+        $display("Transition count: %d", transition_count);
 
         // Re-initialize counters for each test
         last_tick = 0;
